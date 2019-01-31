@@ -7,8 +7,14 @@ services:
      - "5010:5010"
     links:
      - proxy_redis
+     - proxy_ssdb
     image: "proxy_pool"
   proxy_redis:
     ports:
      - "6379:6379"
     image: "redis"
+  proxy_ssdb:
+    ports:
+     - "8888"
+    image: "leobuskin/ssdb-docker"
+
