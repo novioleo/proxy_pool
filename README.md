@@ -28,9 +28,7 @@
 * 下载源码:
 
 ```shell
-git clone git@github.com:jhao104/proxy_pool.git
-
-或者直接到https://github.com/jhao104/proxy_pool 下载zip文件
+git clone https://github.com/novioleo/proxy_pool
 ```
 
 * 安装依赖:
