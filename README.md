@@ -75,13 +75,13 @@ port = 5010          # 监听端口
 * 生产环境 Docker/docker-compose
 
 ```shell
-# Workdir proxy_pool
-docker build -t proxy_pool .
+# 如果没有docker-compose则可以使用pip进行安装
 pip install docker-compose
-docker-compose -f Docker/docker-compose.yml up -d
+# 如果第一次运行，需要加上--build参数
+docker-compose -f Docker/docker-compose.yml up -d #--build
 ```
 
-* 开发环境 Docker
+~~开发环境 Docker~~
 
 ```shell
 # Workdir proxy_pool
