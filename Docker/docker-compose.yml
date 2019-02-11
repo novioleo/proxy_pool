@@ -1,20 +1,32 @@
-version: '2'
+version: '3'
 services:
   proxy_pool:
+    image: proxy_pool:0.1
+    build: ./
+    restart: on-failure
     volumes:
      - ..:/usr/src/app
     ports:
-     - "5010:5010"
+     - 5010:5010
     links:
-     - proxy_redis
+#     - proxy_redis
      - proxy_ssdb
-    image: "proxy_pool"
-  proxy_redis:
-    ports:
-     - "6379:6379"
-    image: "redis"
-  proxy_ssdb:
-    ports:
-     - "8888"
-    image: "leobuskin/ssdb-docker"
+    networks:
+      - proxy
 
+#  proxy_redis:
+#    image: redis:4-alpine
+#    restart: on-failure
+#    networks:
+#      - proxy
+  proxy_ssdb:
+    restart: on-failure
+    image: leobuskin/ssdb-docker
+    volumes:
+      - ssdb_storage:/ssdb/var
+    networks:
+      - proxy
+networks:
+  proxy:
+volumes:
+  ssdb_storage:
