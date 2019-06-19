@@ -1,7 +1,7 @@
 version: '3'
 services:
   proxy_pool:
-    image: proxy_pool:0.1
+    image: proxy_pool:latest
     build: ./
     restart: on-failure
     volumes:
