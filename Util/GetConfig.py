@@ -54,6 +54,10 @@ class GetConfig(object):
         return self.config_file.options('ProxyGetter')
 
     @LazyProperty
+    def proxy_getter_lib(self):
+        return self.config_file.get('ProxyLib','name')
+
+    @LazyProperty
     def host_ip(self):
         return self.config_file.get('API', 'ip')
 
