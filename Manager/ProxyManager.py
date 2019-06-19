@@ -9,18 +9,19 @@
 -------------------------------------------------
    Change Activity:
                    2016/12/3:
+                   2019-06-19：增加自定义proxy getter的部分
 -------------------------------------------------
 """
+
 __author__ = 'JHao'
 
 import random
 
-from Util import EnvUtil
 from DB.DbClient import DbClient
+from Util import EnvUtil
 from Util.GetConfig import config
 from Util.LogHandler import LogHandler
 from Util.utilFunction import verifyProxyFormat
-from ProxyGetter.getFreeProxy import GetFreeProxy
 
 
 class ProxyManager(object):
@@ -34,17 +35,29 @@ class ProxyManager(object):
         self.log = LogHandler('proxy_manager')
         self.useful_proxy_queue = 'useful_proxy'
 
+    @staticmethod
+    def __dynamic_import__(name):
+        components = name.split('.')
+        mod = __import__(components[0])
+        for comp in components[1:]:
+            mod = getattr(mod, comp)
+        return mod
+
     def refresh(self):
         """
-        fetch proxy into Db by ProxyGetter/getFreeProxy.py
+        fetch proxy into Db by ProxyGetter user defined proxy getter class
         :return:
         """
         self.db.changeTable(self.raw_proxy_queue)
+        try:
+            proxy_getter_class = self.__dynamic_import__(config.proxy_getter_lib)
+        except Exception as e:
+            raise Exception('%s not found in ProxyGetter' % config.proxy_getter_lib)
         for proxyGetter in config.proxy_getter_functions:
             # fetch
             try:
                 self.log.info("{func}: fetch proxy start".format(func=proxyGetter))
-                for proxy in getattr(GetFreeProxy, proxyGetter.strip())():
+                for proxy in getattr(proxy_getter_class, proxyGetter.strip())():
                     # 直接存储代理, 不用在代码中排重, hash 结构本身具有排重功能
                     proxy = proxy.strip()
                     if proxy and verifyProxyFormat(proxy):
