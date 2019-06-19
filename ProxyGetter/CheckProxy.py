@@ -13,7 +13,7 @@
 __author__ = 'JHao'
 
 import sys
-from getFreeProxy import GetFreeProxy
+from ProxyGetter.getFreeProxy import GetFreeProxy
 from Util.utilFunction import verifyProxyFormat
 
 sys.path.append('../')
@@ -26,14 +26,14 @@ log = LogHandler('check_proxy', file=False)
 class CheckProxy(object):
 
     @staticmethod
-    def checkAllGetProxyFunc():
+    def checkAllGetProxyFunc(proxy_getter_class):
         """
         检查getFreeProxy所有代理获取函数运行情况
         Returns:
             None
         """
         import inspect
-        member_list = inspect.getmembers(GetFreeProxy, predicate=inspect.isfunction)
+        member_list = inspect.getmembers(proxy_getter_class, predicate=inspect.isfunction)
         proxy_count_dict = dict()
         for func_name, func in member_list:
             log.info(u"开始运行 {}".format(func_name))
@@ -68,5 +68,5 @@ class CheckProxy(object):
 
 
 if __name__ == '__main__':
-    CheckProxy.checkAllGetProxyFunc()
+    CheckProxy.checkAllGetProxyFunc(GetFreeProxy)
     CheckProxy.checkGetProxyFunc(GetFreeProxy.freeProxyFirst)
